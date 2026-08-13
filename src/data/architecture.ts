@@ -1,0 +1,47 @@
+export const ARCHITECTURE_DATA = [
+  {
+    id: "ai-document-processing",
+    title: "AI Document Processing",
+    description: "End-to-end pipeline for extracting structured data from unstructured insurance documents using OCR and AI models.",
+    nodes: [
+      { label: "Document Upload", icon: "upload" },
+      { label: "Document Processing", icon: "file" },
+      { label: "OCR Engine", icon: "scan" },
+      { label: "AI Extraction", icon: "brain" },
+      { label: "Validation", icon: "check" },
+      { label: "Structured Data", icon: "database" },
+      { label: "PostgreSQL", icon: "storage" },
+    ],
+    technologies: ["Python", "FastAPI", "OCR", "AI/ML", "PostgreSQL"],
+  },
+  {
+    id: "cloud-media-pipeline",
+    title: "Cloud Media Pipeline",
+    description: "Scalable cloud-native video transcoding and delivery system for OTT streaming platforms.",
+    nodes: [
+      { label: "Upload", icon: "upload" },
+      { label: "S3 Storage", icon: "storage" },
+      { label: "Task Queue", icon: "queue" },
+      { label: "Transcoding Worker", icon: "cpu" },
+      { label: "FFmpeg", icon: "video" },
+      { label: "H.264 / H.265", icon: "codec" },
+      { label: "CloudFront CDN", icon: "cloud" },
+      { label: "Delivery", icon: "play" },
+    ],
+    technologies: ["AWS ECS", "Fargate", "FFmpeg", "S3", "CloudFront"],
+  },
+  {
+    id: "airflow-automation",
+    title: "Airflow Automation",
+    description: "Centralized workflow orchestration replacing fragile cron jobs with robust, monitorable DAGs.",
+    nodes: [
+      { label: "Apache Airflow", icon: "workflow" },
+      { label: "DAG Scheduler", icon: "clock" },
+      { label: "Cloud API", icon: "api" },
+      { label: "Compute Engine", icon: "cpu" },
+      { label: "Monitoring", icon: "monitor" },
+      { label: "Alert System", icon: "alert" },
+    ],
+    technologies: ["Apache Airflow", "GCP", "Python", "Slack", "CI/CD"],
+  },
+];

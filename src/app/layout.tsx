@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { ScrollObserver } from "@/components/layout/ScrollObserver";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Saurabh Sonalakar | Software Development Engineer",
-  description: "Portfolio of Saurabh Sonalakar, a Software Development Engineer specializing in Python, FastAPI, AI/ML, AWS, GCP, and backend systems.",
+  title: "Saurabh Sonalakar | Software Development Engineer | Python | FastAPI | AI/ML",
+  description: "Portfolio of Saurabh Sonalakar — Software Development Engineer specializing in Python, FastAPI, AI/ML, AWS, GCP, and scalable backend systems.",
   keywords: [
     "Python Developer",
     "Python Backend Developer",
@@ -36,9 +37,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Saurabh Sonalakar | Software Development Engineer",
-    description: "Backend engineer focused on building robust APIs, scalable production systems, and driving intelligent cloud automation through AI/ML integrations.",
+    description: "Backend engineer building robust APIs, scalable production systems, and intelligent cloud automation through AI/ML integrations.",
     url: "https://saurabhsonalakar.com",
-    siteName: "Saurabh Sonalakar Portfolio",
+    siteName: "Saurabh Sonalakar",
     locale: "en_US",
     type: "website",
   },
@@ -55,8 +56,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { ScrollObserver } from "@/components/layout/ScrollObserver";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,7 +66,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-900">
+      <body className="min-h-full flex flex-col">
         <Navbar />
         <main className="flex-1 pt-20 page-transition">
           {children}

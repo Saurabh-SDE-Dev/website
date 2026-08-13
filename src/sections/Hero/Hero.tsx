@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Download, ArrowRight } from 'lucide-react';
+import { Download, ArrowRight, ChevronDown } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Button } from '@/components/ui/Button';
 import { PROFILE } from '@/data/profile';
@@ -22,91 +22,119 @@ export function Hero() {
     window.open('/resume/Saurabh-Sonalakar-Resume.pdf', '_blank');
   };
 
-  return (
-    <section 
-      id="home" 
-      className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden bg-white border-b border-gray-100"
-    >
-      {/* Abstract Background Element for subtle professional design */}
-      <div className="absolute top-0 right-0 -z-10 w-full h-full overflow-hidden opacity-30 pointer-events-none">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse"></div>
-        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-pulse" style={{ animationDelay: '2s' }}></div>
-      </div>
+  const handleScrollDown = () => {
+    const element = document.getElementById('about');
+    if (element) {
+      window.scrollTo({
+        top: element.offsetTop - 80,
+        behavior: 'smooth'
+      });
+    }
+  };
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+  return (
+    <section
+      id="home"
+      className="relative min-h-[100vh] flex flex-col justify-center overflow-hidden"
+    >
+      {/* Animated Grid Background */}
+      <div className="absolute inset-0 grid-bg opacity-60" />
+
+      {/* Gradient Glow Spots */}
+      <div className="glow-spot w-[500px] h-[500px] bg-[var(--accent)] opacity-[0.04] top-1/4 -right-20" />
+      <div className="glow-spot w-[400px] h-[400px] bg-indigo-500 opacity-[0.03] bottom-1/4 -left-20" />
+
+      {/* Noise Overlay */}
+      <div className="absolute inset-0 noise-overlay pointer-events-none" />
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl">
-          <div className="inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold text-blue-600 bg-blue-50 mb-6 border border-blue-100 shadow-sm animate-fade-in-up">
-            {PROFILE.positioning}
+          {/* Status Badge */}
+          <div className="hero-reveal hero-reveal-1 mb-8">
+            <span className="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-[var(--accent)] bg-[var(--accent-subtle)] border border-[var(--border-accent)] rounded-full">
+              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+              Available for opportunities
+            </span>
           </div>
-          
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+
+          {/* Name */}
+          <h1 className="hero-reveal hero-reveal-2 text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-[var(--text-heading)] mb-4 leading-[1.1]">
             {PROFILE.name}
           </h1>
-          
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-700 mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+
+          {/* Title */}
+          <h2 className="hero-reveal hero-reveal-3 text-xl sm:text-2xl lg:text-3xl font-medium text-[var(--text-secondary)] mb-6">
             {PROFILE.title}
           </h2>
-          
-          <p className="text-lg sm:text-xl text-gray-600 mb-10 max-w-2xl leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+
+          {/* Tech Stack Line */}
+          <div className="hero-reveal hero-reveal-4 flex items-center gap-2 mb-8">
+            <span className="font-mono text-sm text-[var(--accent)]">{'>'}</span>
+            <span className="font-mono text-sm text-[var(--text-muted)]">
+              {PROFILE.positioning}
+            </span>
+          </div>
+
+          {/* Introduction */}
+          <p className="hero-reveal hero-reveal-4 text-base sm:text-lg text-[var(--text-secondary)] mb-10 max-w-2xl leading-relaxed">
             {PROFILE.introduction}
           </p>
-          
-          <div className="flex flex-wrap items-center gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <Button 
-              size="lg" 
+
+          {/* CTA Buttons */}
+          <div className="hero-reveal hero-reveal-5 flex flex-wrap items-center gap-3 mb-12">
+            <Button
+              size="lg"
               onClick={handleScrollToProjects}
-              className="group gap-2 shadow-sm hover:shadow-md transition-all"
+              className="group"
             >
               View My Work
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Button>
-            
-            <Button 
-              variant="outline" 
-              size="lg" 
+
+            <Button
+              variant="outline"
+              size="lg"
               onClick={handleDownloadResume}
-              className="gap-2 shadow-sm hover:shadow-md transition-all bg-white"
             >
-              <Download size={18} />
-              Download Resume
+              <Download size={16} />
+              Resume
             </Button>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-6 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-            <div className="flex items-center gap-4">
+          {/* Social + Tech Tags */}
+          <div className="hero-reveal hero-reveal-6 flex flex-col sm:flex-row sm:items-center gap-6">
+            <div className="flex items-center gap-3">
               {SOCIAL_LINKS.github && (
-                <a 
-                  href={SOCIAL_LINKS.github} 
-                  target="_blank" 
+                <a
+                  href={SOCIAL_LINKS.github}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-gray-900 transition-colors bg-gray-50 hover:bg-gray-100 p-3 rounded-full border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors p-2 rounded-lg hover:bg-[var(--bg-tertiary)] border border-[var(--border)]"
                   aria-label="GitHub Profile"
                 >
-                  <FaGithub size={22} />
+                  <FaGithub size={18} />
                 </a>
               )}
-              
               {SOCIAL_LINKS.linkedin && (
-                <a 
-                  href={SOCIAL_LINKS.linkedin} 
-                  target="_blank" 
+                <a
+                  href={SOCIAL_LINKS.linkedin}
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-blue-600 transition-colors bg-gray-50 hover:bg-blue-50 p-3 rounded-full border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors p-2 rounded-lg hover:bg-[var(--bg-tertiary)] border border-[var(--border)]"
                   aria-label="LinkedIn Profile"
                 >
-                  <FaLinkedin size={22} />
+                  <FaLinkedin size={18} />
                 </a>
               )}
             </div>
-            
-            <div className="hidden sm:block w-px h-8 bg-gray-200"></div>
-            
+
+            {(SOCIAL_LINKS.github || SOCIAL_LINKS.linkedin) && (
+              <div className="hidden sm:block w-px h-6 bg-[var(--border)]" />
+            )}
+
             <div className="flex flex-wrap gap-2">
               {PROFILE.technologies.map((tech) => (
-                <span 
-                  key={tech} 
-                  className="text-xs font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200"
-                >
+                <span key={tech} className="tech-tag">
                   {tech}
                 </span>
               ))}
@@ -114,6 +142,15 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <button
+        onClick={handleScrollDown}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors scroll-indicator focus:outline-none"
+        aria-label="Scroll down"
+      >
+        <ChevronDown size={24} />
+      </button>
     </section>
   );
 }
