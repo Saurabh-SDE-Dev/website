@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Saurabh Sonalakar | Software Development Engineer Portfolio
 
-## Getting Started
+Personal portfolio website for Saurabh Sonalakar, built with Next.js (App Router), React, Tailwind CSS, and TypeScript. 
 
-First, run the development server:
+Designed to highlight expertise in Python, FastAPI, AI/ML, AWS, and GCP cloud architecture.
+
+## 📸 Screenshots
+
+![Hero Section](public/screenshots/hero-placeholder.png)
+*(Note: Add screenshot of Hero Section to `public/screenshots/hero-placeholder.png`)*
+
+![Projects Section](public/screenshots/projects-placeholder.png)
+*(Note: Add screenshot of Projects Section to `public/screenshots/projects-placeholder.png`)*
+
+## 🚀 Quick Start
+
+### 1. Prerequisites
+- Node.js (v18.17.0 or higher)
+- npm (or yarn/pnpm/bun)
+
+### 2. Setup Instructions
+Clone the repository and install dependencies:
+
+```bash
+# Clone the repository
+git clone <GITHUB_REPOSITORY_URL>
+
+# Navigate into the project directory
+cd website
+
+# Install dependencies
+npm install
+```
+
+### 3. Environment Variables
+No secrets are required by default. 
+To enable higher rate limits on the GitHub API integration (optional):
+1. Copy `.env.example` to `.env.local`
+2. Add your GitHub Personal Access Token (PAT) as `GITHUB_TOKEN=your_token_here`
+
+> [!WARNING]
+> Do **NOT** prefix this token with `NEXT_PUBLIC_` to prevent it from leaking to the client browser.
+
+### 4. Development Instructions
+Start the local development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to preview the site. Changes will hot-reload automatically.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 5. Production Build Instructions
+To verify and create an optimized production build:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Lint the codebase
+npm run lint
 
-## Learn More
+# Build the production bundle
+npm run build
 
-To learn more about Next.js, take a look at the following resources:
+# Start the production server locally
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 6. Deployment Instructions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is optimized for deployment on Vercel:
 
-## Deploy on Vercel
+1. Push your code to a GitHub repository.
+2. Sign in to [Vercel](https://vercel.com) and click **Add New... > Project**.
+3. Import your GitHub repository.
+4. Leave the default build commands (`npm run build`).
+5. Add `GITHUB_TOKEN` to the Environment Variables if needed.
+6. Click **Deploy**.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Alternatively, it can be deployed on AWS Amplify, Render, or any standard Node.js hosting environment using the build instructions above.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 Configuration
+
+All data displayed on the portfolio is managed centrally in the `src/data/` directory. Update the respective `.ts` files to modify your skills, experience, projects, or certifications without altering UI components.
+
+- `src/data/profile.ts`: Core personal details
+- `src/data/projects.ts`: Portfolio projects
+- `src/data/experience.ts`: Work history
+- `src/data/github.ts`: GitHub open-source configuration
+
+> [!IMPORTANT]
+> **Resume File**: Place your actual resume PDF in `public/resume/Saurabh-Sonalakar-Resume.pdf`. Do not change the filename unless you also update the `Hero`, `Navbar`, and `MobileMenu` components.
