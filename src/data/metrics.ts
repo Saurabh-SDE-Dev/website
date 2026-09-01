@@ -1,30 +1,32 @@
-export const METRICS_DATA = [
+import type { Metric } from "@/types";
+
+export const METRICS_DATA: Metric[] = [
   {
     value: 60,
     suffix: "%",
     label: "Reduction in Manual Review Errors",
     description: "Through automated AI-powered graphic detection",
-    source: "Graphic Detection System"
+    source: "Graphic Detection System",
   },
   {
     value: 30,
     suffix: "%",
-    label: "Faster ML Execution",
-    description: "Optimized model inference in production",
-    source: "Graphic Detection System"
+    label: "Faster ML Inference",
+    description: "Optimized model execution in production",
+    source: "Graphic Detection System",
   },
   {
     value: 40,
     suffix: "%",
-    label: "Reduction in Incident Response Time",
+    label: "Faster Incident Response",
     description: "Via centralized Airflow alerting and orchestration",
-    source: "Cloud Automation"
+    source: "Cloud Automation",
   },
   {
     value: 40,
     suffix: "%",
-    label: "Reduction in MTTR",
+    label: "MTTR Improvement",
     description: "Through comprehensive Datadog monitoring and dashboards",
-    source: "Datadog Monitoring"
-  }
+    source: "Datadog Monitoring",
+  },
 ];

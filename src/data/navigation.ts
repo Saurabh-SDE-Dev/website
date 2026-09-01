@@ -1,15 +1,9 @@
-export const NAV_LINKS = [
-  { name: 'Home', href: '#home' },
-  { name: 'About', href: '#about' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Architecture', href: '#architecture' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Contact', href: '#contact' },
-];
+import type { NavItem } from "@/types";
 
-export const SOCIAL_LINKS = {
-  // Add LinkedIn/GitHub URL from resume later. Left empty as per rules.
-  linkedin: '',
-  github: '',
-};
+export const NAV_ITEMS: NavItem[] = [
+  { label: "ABOUT", href: "#profile" },
+  { label: "EXPERIENCE", href: "#experience" },
+  { label: "WORK", href: "#work" },
+  { label: "CERTIFICATIONS", href: "#certifications" },
+  { label: "CONTACT", href: "#contact" },
+];

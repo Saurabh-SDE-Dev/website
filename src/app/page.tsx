@@ -1,29 +1,34 @@
-import React from 'react';
-import { Hero } from '@/sections/Hero';
-import { About } from '@/sections/About';
-import { Skills } from '@/sections/Skills';
-import { Experience } from '@/sections/Experience';
-import { Projects } from '@/sections/Projects';
-import { Certifications } from '@/sections/Certifications';
-import { Education } from '@/sections/Education';
-import { GitHub } from '@/sections/GitHub';
-import { Contact } from '@/sections/Contact';
+import { Hero } from "@/components/sections/Hero";
+import { Profile } from "@/components/sections/Profile";
+import { Experience } from "@/components/sections/Experience";
+import { Projects } from "@/components/sections/Projects";
+import { Architecture } from "@/components/sections/Architecture";
+import { Credentials } from "@/components/sections/Credentials";
+import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <main className="flex min-h-screen flex-col items-center justify-between">
+      {/* 01 HERO */}
       <Hero />
-      <About />
+      
+      {/* 01 PROFILE & 02 CORE COMPETENCIES */}
+      <Profile />
 
+      {/* 03 EXPERIENCE */}
       <Experience />
+
+      {/* 04 SELECTED WORK */}
       <Projects />
-      <GitHub />
-      <Skills />
 
-      <Certifications />
-      <Education />
+      {/* 05 ENGINEERING IMPACT & SYSTEM ARCHITECTURE */}
+      <Architecture />
 
+      {/* 06 CERTIFICATIONS, 07 EDUCATION, 08 DETAILS */}
+      <Credentials />
+
+      {/* 09 CONTACT */}
       <Contact />
-    </div>
+    </main>
   );
 }

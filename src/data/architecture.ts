@@ -1,47 +1,35 @@
-export const ARCHITECTURE_DATA = [
-  {
-    id: "ai-document-processing",
-    title: "AI Document Processing",
-    description: "End-to-end pipeline for extracting structured data from unstructured insurance documents using OCR and AI models.",
-    nodes: [
-      { label: "Document Upload", icon: "upload" },
-      { label: "Document Processing", icon: "file" },
-      { label: "OCR Engine", icon: "scan" },
-      { label: "AI Extraction", icon: "brain" },
-      { label: "Validation", icon: "check" },
-      { label: "Structured Data", icon: "database" },
-      { label: "PostgreSQL", icon: "storage" },
-    ],
-    technologies: ["Python", "FastAPI", "OCR", "AI/ML", "PostgreSQL"],
-  },
-  {
-    id: "cloud-media-pipeline",
-    title: "Cloud Media Pipeline",
-    description: "Scalable cloud-native video transcoding and delivery system for OTT streaming platforms.",
-    nodes: [
-      { label: "Upload", icon: "upload" },
-      { label: "S3 Storage", icon: "storage" },
-      { label: "Task Queue", icon: "queue" },
-      { label: "Transcoding Worker", icon: "cpu" },
-      { label: "FFmpeg", icon: "video" },
-      { label: "H.264 / H.265", icon: "codec" },
-      { label: "CloudFront CDN", icon: "cloud" },
-      { label: "Delivery", icon: "play" },
-    ],
-    technologies: ["AWS ECS", "Fargate", "FFmpeg", "S3", "CloudFront"],
-  },
-  {
-    id: "airflow-automation",
-    title: "Airflow Automation",
-    description: "Centralized workflow orchestration replacing fragile cron jobs with robust, monitorable DAGs.",
-    nodes: [
-      { label: "Apache Airflow", icon: "workflow" },
-      { label: "DAG Scheduler", icon: "clock" },
-      { label: "Cloud API", icon: "api" },
-      { label: "Compute Engine", icon: "cpu" },
-      { label: "Monitoring", icon: "monitor" },
-      { label: "Alert System", icon: "alert" },
-    ],
-    technologies: ["Apache Airflow", "GCP", "Python", "Slack", "CI/CD"],
-  },
+export const IMPACT_METRICS = [
+  { value: 60, suffix: "%", label: "REDUCTION IN MANUAL REVIEW ERRORS" },
+  { value: 30, suffix: "%", label: "FASTER ML INFERENCE" },
+  { value: 40, suffix: "%", label: "FASTER INCIDENT RESPONSE" },
+  { value: 40, suffix: "%", label: "MTTR IMPROVEMENT" }
+];
+
+export interface ArchNode {
+  id: string;
+  label: string;
+  description: string;
+  connections: string[];
+}
+
+export const ARCHITECTURE_NODES: ArchNode[] = [
+  { id: "client", label: "CLIENT", description: "External consumers", connections: ["rest_api"] },
+  { id: "rest_api", label: "REST API", description: "API Gateway", connections: ["backend"] },
+  { id: "backend", label: "FASTAPI / DJANGO", description: "Core services", connections: ["db", "ai", "ocr"] },
+  { id: "db", label: "POSTGRESQL", description: "Relational data", connections: ["services"] },
+  { id: "ai", label: "AI / ML", description: "Intelligent processing", connections: ["llm"] },
+  { id: "ocr", label: "OCR", description: "Document extraction", connections: ["llm"] },
+  { id: "llm", label: "LLMs", description: "Generative AI", connections: ["services"] },
+  { id: "services", label: "INTERNAL SERVICES", description: "Business logic", connections: ["aws", "gcp"] },
+  { id: "aws", label: "AWS", description: "Cloud infrastructure", connections: ["datadog"] },
+  { id: "gcp", label: "GCP", description: "Cloud infrastructure", connections: ["datadog"] },
+  { id: "datadog", label: "DATADOG", description: "Observability", connections: [] }
+];
+
+export const TECHNICAL_PILLARS = [
+  { id: "api", label: "API", technologies: ["FastAPI", "Django", "REST", "Microservices"] },
+  { id: "data", label: "DATA", technologies: ["PostgreSQL", "MongoDB", "SQLAlchemy", "Alembic"] },
+  { id: "ai", label: "AI", technologies: ["OCR", "Computer Vision", "TensorFlow", "Generative AI", "LLMs"] },
+  { id: "cloud", label: "CLOUD", technologies: ["AWS", "GCP", "Docker", "Kubernetes", "CI/CD", "Airflow"] },
+  { id: "obs", label: "OBSERVABILITY", technologies: ["Datadog", "Monitoring", "Alerting"] }
 ];

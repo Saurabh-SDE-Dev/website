@@ -1,10 +1,9 @@
 export const CONTACT_INFO = {
-  // Update with your actual email
-  email: "contact@example.com",
-  // Update with your actual LinkedIn profile URL
-  linkedin: "",
-  // Update with your actual GitHub profile URL
-  github: "",
-  // Brief text encouraging people to reach out
-  message: "I am always open to discussing new projects, creative ideas or opportunities to be part of your visions."
+  email: "saurabh.sonalkar10@gmail.com",
+  linkedin: "https://www.linkedin.com/in/saurabh-sonalakar-121551217",
+  phone: "+91-7709924599",
+  location: "Mumbai, India",
+  headline: "LET'S BUILD SOMETHING INTELLIGENT.",
+  message:
+    "Interested in backend engineering, AI-powered systems, automation, and scalable infrastructure?",
 };

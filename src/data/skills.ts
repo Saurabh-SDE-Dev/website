@@ -1,53 +1,92 @@
-import { 
-  Code2, 
-  Server, 
-  BrainCircuit, 
-  Database, 
-  Cloud, 
-  Cog, 
-  Activity, 
-  Video 
-} from 'lucide-react';
+export interface SkillCategory {
+  id: string;
+  title: string;
+  description?: string;
+  technologies: string[];
+}
 
-export const SKILL_CATEGORIES = [
+export const WHAT_I_BUILD = [
   {
-    title: "Programming",
-    icon: Code2,
-    skills: ["Python", "C++"]
+    id: "backend",
+    title: "BACKEND SYSTEMS",
+    description: "Scalable APIs, microservices, backend services, authentication, authorization, and data-driven applications."
   },
   {
-    title: "Backend/Web",
-    icon: Server,
-    skills: ["FastAPI", "Django", "REST APIs", "HTML", "CSS", "JavaScript"]
+    id: "ai",
+    title: "AI / ML",
+    description: "Computer vision, OCR pipelines, machine-learning workflows, Generative AI, and LLM-powered applications."
   },
   {
-    title: "AI/ML/Data",
-    icon: BrainCircuit,
-    skills: ["Pandas", "NumPy", "TensorFlow", "OpenCV", "OCR"]
+    id: "cloud",
+    title: "CLOUD & AUTOMATION",
+    description: "AWS, GCP, containerized applications, CI/CD, workflow automation, and infrastructure-oriented engineering."
   },
   {
-    title: "Databases",
-    icon: Database,
-    skills: ["PostgreSQL", "SQL", "MongoDB"]
+    id: "production",
+    title: "PRODUCTION ENGINEERING",
+    description: "Monitoring, observability, media processing, transcoding, and reliable production workflows."
+  }
+];
+
+export const CORE_COMPETENCIES: SkillCategory[] = [
+  {
+    id: "backend",
+    title: "BACKEND ENGINEERING",
+    technologies: [
+      "Python",
+      "FastAPI",
+      "Django",
+      "REST APIs",
+      "Microservices",
+      "PostgreSQL",
+      "MongoDB",
+      "SQLAlchemy",
+      "Alembic"
+    ]
   },
   {
-    title: "Cloud",
-    icon: Cloud,
-    skills: ["AWS", "GCP", "EC2", "ECS", "Fargate", "S3", "CloudFront", "Route 53", "Boto3", "GCP Compute Engine", "GCP Transcoder", "GCP SDK"]
+    id: "aiml",
+    title: "AI / ML",
+    technologies: [
+      "Machine Learning",
+      "Generative AI",
+      "LLMs",
+      "OCR",
+      "Computer Vision",
+      "OpenCV",
+      "TensorFlow"
+    ]
   },
   {
-    title: "DevOps/Automation",
-    icon: Cog,
-    skills: ["Docker", "Kubernetes", "CI/CD", "Apache Airflow", "Node-RED"]
+    id: "cloud",
+    title: "CLOUD & INFRASTRUCTURE",
+    technologies: [
+      "AWS",
+      "GCP",
+      "Docker",
+      "Kubernetes",
+      "CI/CD",
+      "GitHub Actions"
+    ]
   },
   {
-    title: "Monitoring",
-    icon: Activity,
-    skills: ["Datadog", "Logging", "Alerting"]
+    id: "automation",
+    title: "AUTOMATION & DATA",
+    technologies: [
+      "Apache Airflow",
+      "Node-RED",
+      "ETL Workflows",
+      "Workflow Automation"
+    ]
   },
   {
-    title: "Media",
-    icon: Video,
-    skills: ["FFmpeg", "Transcoding"]
+    id: "media",
+    title: "MEDIA & OBSERVABILITY",
+    technologies: [
+      "FFmpeg",
+      "Media Transcoding",
+      "Dolby Atmos Testing",
+      "Datadog"
+    ]
   }
 ];

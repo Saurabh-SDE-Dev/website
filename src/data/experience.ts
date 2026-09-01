@@ -1,75 +1,90 @@
-export const EXPERIENCE_DATA = [
+export interface ExperienceItem {
+  id: string;
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  shortDescription: string;
+  responsibilities: string[];
+  technologies: string[];
+  relatedWork: { label: string; href?: string }[];
+}
+
+export const EXPERIENCE_DATA: ExperienceItem[] = [
   {
+    id: "wdipl",
     company: "WDIPL",
     role: "Software Developer (Python)",
-    period: "Jan 2026 – Present",
-    projects: [
-      {
-        name: "AutoLex — Insurance Process Automation (Government Client)",
-        description: "Developing robust microservices for a large-scale, confidential government project utilizing Python and FastAPI.",
-        highlights: [
-          "Architected and implemented high-performance REST APIs to power insurance process automation workflows.",
-          "Integrated advanced document processing and OCR capabilities for automated data extraction.",
-          "Designed and optimized relational database schemas using PostgreSQL.",
-          "Implemented secure authentication and Role-Based Access Control (RBAC) mechanisms.",
-          "Leveraged AI-powered models to streamline document analysis and enhance operational efficiency."
-        ],
-        technologies: ["Python", "FastAPI", "PostgreSQL", "REST APIs", "Microservices", "OCR", "AI Integration"]
-      }
+    period: "January 2026 — Present",
+    location: "Mumbai, India",
+    shortDescription: "Architected and developed scalable Python and FastAPI microservices for document automation.",
+    responsibilities: [
+      "Architected and developed scalable Python and FastAPI microservices.",
+      "Built RESTful APIs for document intake, validation, processing, and status tracking.",
+      "Built OCR-based extraction pipelines.",
+      "Optimized PostgreSQL schemas and indexing strategies.",
+      "Implemented JWT authentication.",
+      "Implemented role-based access control.",
+      "Built AI-powered document extraction integrated with OCR pipelines.",
+      "Extracted structured data from complex insurance PDFs."
+    ],
+    technologies: [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "OCR",
+      "AI / LLMs",
+      "REST APIs",
+      "JWT",
+      "RBAC"
+    ],
+    relatedWork: [
+      { label: "AUTOLEX - Insurance Process Automation", href: "#autolex" }
     ]
   },
   {
+    id: "skandha",
     company: "Skandha Media Services Pvt. Ltd.",
-    role: "Software Development Engineer",
-    period: "July 2023 – Jan 2026",
-    projects: [
-      {
-        name: "Graphic Detection System",
-        description: "Built and optimized machine learning models for detecting specific graphics in media streams.",
-        highlights: [
-          "Developed ML models using TensorFlow and OpenCV, reducing manual review errors by 60%.",
-          "Optimized model execution, achieving a 30% faster execution time in production.",
-          "Implemented comprehensive production monitoring to track model drift and accuracy."
-        ],
-        technologies: ["TensorFlow", "OpenCV", "Python", "ML Optimization"]
-      },
-      {
-        name: "Cloud Automation & Orchestration",
-        description: "Designed scalable, automated cloud workflows for media transcoding.",
-        highlights: [
-          "Automated complex media transcoding workflows on GCP using Apache Airflow and Compute Engine.",
-          "Integrated automated Slack and email alerts, leading to a 40% improvement in incident response times."
-        ],
-        technologies: ["Apache Airflow", "GCP", "Compute Engine", "Automation"]
-      },
-      {
-        name: "Datadog Monitoring Infrastructure",
-        description: "Led the implementation of robust observability and monitoring solutions.",
-        highlights: [
-          "Configured Datadog to monitor CDNs, video encoders, and REST APIs.",
-          "Designed custom log collection pipelines, dynamic dashboards, and actionable alerts.",
-          "Reduced Mean Time To Resolution (MTTR) by 40% through enhanced observability."
-        ],
-        technologies: ["Datadog", "Monitoring", "Alerting", "Log Collection"]
-      },
-      {
-        name: "DNS Management System",
-        description: "Developed a comprehensive DNS management tool for cloud infrastructure.",
-        highlights: [
-          "Built a Django application leveraging Boto3 to manage AWS Route 53 and EC2 instances.",
-          "Implemented strict Role-Based Access Control (RBAC) and detailed audit logging."
-        ],
-        technologies: ["Django", "AWS Route 53", "Boto3", "EC2", "RBAC"]
-      },
-      {
-        name: "Custom Transcoder & Dolby Atmos Testing",
-        description: "Engineered media processing solutions for OTT workflows.",
-        highlights: [
-          "Developed a custom multi-codec transcoding system tailored for OTT platforms.",
-          "Implemented and automated Dolby Atmos testing within media processing pipelines."
-        ],
-        technologies: ["Media Processing", "FFmpeg", "Transcoding", "OTT Workflows"]
-      }
+    role: "Software Development Engineer – I",
+    period: "July 2023 — January 2026",
+    location: "Mumbai, India",
+    shortDescription: "Developed Python backend services, automation workflows, and media processing pipelines.",
+    responsibilities: [
+      "Developed Python backend services and automation workflows.",
+      "Built REST APIs using Django REST Framework.",
+      "Implemented role-based access control.",
+      "Built cloud automation for AWS and GCP environments.",
+      "Designed and integrated a custom transcoder.",
+      "Worked on Dolby Atmos testing.",
+      "Built monitoring and alerting workflows using Datadog.",
+      "Worked with media processing and OTT workflows."
+    ],
+    technologies: [
+      "Python",
+      "Django",
+      "Django REST Framework",
+      "AWS",
+      "GCP",
+      "Docker",
+      "Kubernetes",
+      "Apache Airflow",
+      "Datadog",
+      "FFmpeg",
+      "Node-RED"
+    ],
+    relatedWork: [
+      { label: "GRAPHICAL DETECTION SYSTEM", href: "#graphical-detection" },
+      { label: "DNS MANAGEMENT", href: "#dns-management" },
+      { label: "CLOUD AUTOMATION", href: "#cloud-automation" },
+      { label: "CUSTOM TRANSCODER", href: "#custom-transcoder" },
+      { label: "DATADOG MONITORING", href: "#datadog-monitoring" }
     ]
   }
+];
+
+export const IMPACT_METRICS = [
+  { value: "60%", label: "REDUCTION IN MANUAL REVIEW ERRORS" },
+  { value: "30%", label: "FASTER ML INFERENCE" },
+  { value: "40%", label: "FASTER INCIDENT RESPONSE" },
+  { value: "40%", label: "MTTR IMPROVEMENT" }
 ];

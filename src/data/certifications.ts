@@ -1,12 +1,23 @@
-export const CERTIFICATIONS_DATA = [
+export interface Certification {
+  id: string;
+  title: string;
+  provider: string;
+}
+
+export const CERTIFICATIONS_DATA: Certification[] = [
   {
-    title: "IBM AI Developer Certification",
-    issuer: "IBM / Coursera",
-    skills: ["Generative AI", "Prompt Engineering", "Machine Learning", "LLMs", "SDLC"]
+    id: "aws-cp",
+    title: "AWS CERTIFIED CLOUD PRACTITIONER",
+    provider: "Amazon Web Services",
   },
   {
-    title: "Introduction to Data Science Specialization",
-    issuer: "IBM / Coursera",
-    skills: ["Data Analysis", "Data Mining", "Data Modelling", "SQL", "Jupyter"]
+    id: "aws-dev",
+    title: "AWS CERTIFIED DEVELOPER – ASSOCIATE",
+    provider: "Amazon Web Services",
+  },
+  {
+    id: "ibm-ai",
+    title: "IBM AI ENGINEERING PROFESSIONAL CERTIFICATE",
+    provider: "IBM",
   }
 ];

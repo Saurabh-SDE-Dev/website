@@ -1,59 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { CustomCursor } from "@/components/layout/CustomCursor";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { ScrollObserver } from "@/components/layout/ScrollObserver";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space" });
+const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "Saurabh Sonalakar | Software Development Engineer | Python | FastAPI | AI/ML",
-  description: "Portfolio of Saurabh Sonalakar — Software Development Engineer specializing in Python, FastAPI, AI/ML, AWS, GCP, and scalable backend systems.",
-  keywords: [
-    "Python Developer",
-    "Python Backend Developer",
-    "FastAPI Developer",
-    "Backend Engineer",
-    "AI/ML Engineer",
-    "Cloud Engineer",
-    "AWS Developer",
-    "GCP Developer",
-    "Software Development Engineer"
-  ],
-  authors: [{ name: "Saurabh Sonalakar" }],
-  creator: "Saurabh Sonalakar",
-  metadataBase: new URL('https://saurabhsonalakar.com'),
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    title: "Saurabh Sonalakar | Software Development Engineer",
-    description: "Backend engineer building robust APIs, scalable production systems, and intelligent cloud automation through AI/ML integrations.",
-    url: "https://saurabhsonalakar.com",
-    siteName: "Saurabh Sonalakar",
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Saurabh Sonalakar | Software Development Engineer",
-    description: "Portfolio of Saurabh Sonalakar, Backend Engineer specializing in Python, FastAPI, AWS, GCP and AI/ML.",
-    creator: "@saurabhsonalakar",
-  },
-  icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
-  },
+  title: "Saurabh Sonalkar — Software Development Engineer",
+  description:
+    "Software Development Engineer specializing in Python, backend systems, AI/ML, cloud automation, and production engineering.",
 };
 
 export default function RootLayout({
@@ -64,15 +24,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} antialiased dark scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col">
-        <Navbar />
-        <main className="flex-1 pt-20 page-transition">
+      <body className="font-sans text-[var(--color-text-primary)] bg-[var(--color-bg-primary)]">
+        <CustomCursor />
+        <SmoothScroll>
+          <Navbar />
           {children}
-        </main>
-        <Footer />
-        <ScrollObserver />
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );

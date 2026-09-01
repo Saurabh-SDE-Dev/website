@@ -1,10 +1,13 @@
-export const EDUCATION_DATA = [
-  {
-    degree: "Bachelor of Technology",
-    major: "Computer Science & Engineering",
-    institution: "D.Y. Patil College of Engineering & Technology",
-    location: "Kolhapur, Maharashtra",
-    graduationYear: "2023",
-    cgpa: "7.99"
-  }
-];
+export interface Education {
+  degree: string;
+  major: string;
+  cgpa: string;
+  year: string;
+}
+
+export const EDUCATION_DATA: Education = {
+  degree: "B.TECH",
+  major: "COMPUTER SCIENCE & ENGINEERING",
+  cgpa: "7.99 / 10",
+  year: "2023"
+};
