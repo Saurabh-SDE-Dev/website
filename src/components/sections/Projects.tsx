@@ -1,132 +1,157 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { PROJECTS_DATA, Project } from "@/data/projects";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
+import dynamic from "next/dynamic";
+import { PROJECTS_DATA } from "@/data/projects";
+import { useWebGL } from "@/hooks/useWebGL";
 
-function ProjectVisual({ project, index }: { project: Project, index: number }) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["3deg", "-3deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-3deg", "3deg"]);
+const SceneLighting = dynamic(
+  () => import("@/components/3d/SceneLighting").then(mod => mod.SceneLighting),
+  { ssr: false }
+);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
+const ProjectSystemVisual = dynamic(
+  () => import("@/components/3d/ProjectVisualizations").then(mod => mod.ProjectSystemVisual),
+  { ssr: false }
+);
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+const ProjectOCRVisual = dynamic(
+  () => import("@/components/3d/ProjectVisualizations").then(mod => mod.ProjectOCRVisual),
+  { ssr: false }
+);
 
-  // Generate an abstract gradient based on index for the visual
-  const gradients = [
-    "from-[#007aff]/20 to-[#5856d6]/20",
-    "from-[#111111]/10 to-[#555555]/10",
-    "from-[#5856d6]/20 to-[#007aff]/20",
-    "from-[#0a0a0c]/10 to-[#111114]/10",
-  ];
-  const bgGradient = gradients[index % gradients.length];
-
-  return (
-    <motion.div
-      className="relative w-full aspect-[4/3] md:aspect-[16/9] bg-[#f1f3f5] overflow-hidden"
-      style={{ 
-        rotateX, rotateY, 
-        transformStyle: "preserve-3d", 
-        perspective: 1000,
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* Premium subtle background gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${bgGradient} mix-blend-multiply`} />
-      
-      {/* Abstract structural grid for technical feel */}
-      <div className="absolute inset-0 opacity-20" style={{
-        backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
-        backgroundSize: '40px 40px'
-      }} />
-
-      {/* Center abstract object to represent the project */}
-      <motion.div 
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 h-1/2 border border-black/10 bg-white/50 backdrop-blur-md shadow-2xl flex items-center justify-center p-8 text-center"
-        style={{ transform: "translate(-50%, -50%) translateZ(40px)" }}
-      >
-        <span className="text-sm font-mono tracking-widest text-black/50 uppercase">
-          {project.category}
-        </span>
-      </motion.div>
-    </motion.div>
-  );
-}
+const ProjectDataVisual = dynamic(
+  () => import("@/components/3d/ProjectVisualizations").then(mod => mod.ProjectDataVisual),
+  { ssr: false }
+);
 
 export function Projects() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isWebGLSupported = useWebGL();
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  useEffect(() => {
+    return smoothProgress.onChange((latest) => {
+      const segment = 1 / PROJECTS_DATA.length;
+      let newIndex = Math.floor(latest / segment);
+      if (newIndex >= PROJECTS_DATA.length) newIndex = PROJECTS_DATA.length - 1;
+      if (newIndex !== activeIndex) setActiveIndex(newIndex);
+    });
+  }, [smoothProgress, activeIndex]);
+
+  // Select appropriate visual based on index
+  const renderVisual = (index: number) => {
+    if (index === 0) return <ProjectSystemVisual />;
+    if (index === 1) return <ProjectOCRVisual />;
+    return <ProjectDataVisual />;
+  };
+
   return (
-    <section id="work" className="theme-light relative w-full py-32 md:py-48">
-      <div className="section-container">
-        
-        {/* Header */}
-        <div className="mb-24 flex items-center gap-6">
-          <p className="editorial-label">03 — SELECTED WORK</p>
-          <div className="h-[1px] w-24 bg-black/10" />
-        </div>
+    <section 
+      id="work" 
+      ref={containerRef}
+      className="bg-surface relative w-full"
+      style={{ height: `${PROJECTS_DATA.length * 100}vh` }}
+    >
+      <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
+        <div className="section-container w-full h-full flex flex-col justify-center">
+          
+          <div className="absolute top-24 left-0 w-full px-6 md:px-12 lg:px-20 z-20">
+            <div className="flex items-center gap-6">
+              <p className="editorial-label">03 — SELECTED WORK</p>
+              <div className="h-[1px] w-24 bg-[#F5F7FA]/10" />
+            </div>
+          </div>
 
-        {/* Asymmetrical Editorial Grid */}
-        <div className="flex flex-col gap-32 md:gap-48">
-          {PROJECTS_DATA.map((project, index) => {
-            const isEven = index % 2 === 0;
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center h-[70vh]">
+            
+            {/* Left: Project Details */}
+            <div className="relative h-full flex flex-col justify-center z-10 pr-8">
+              {PROJECTS_DATA.map((project, index) => {
+                const isActive = index === activeIndex;
+                return (
+                  <motion.div
+                    key={project.id}
+                    initial={false}
+                    animate={{ 
+                      opacity: isActive ? 1 : 0, 
+                      x: isActive ? 0 : -30,
+                      pointerEvents: isActive ? 'auto' : 'none',
+                      position: isActive ? 'relative' : 'absolute'
+                    }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="flex flex-col"
+                  >
+                    <p className="text-[10px] font-mono tracking-widest text-[#22D3EE] uppercase mb-6">
+                      {project.number} — {project.category}
+                    </p>
+                    
+                    <h3 className="text-4xl lg:text-6xl font-bold tracking-tight text-[#F5F7FA] mb-8 leading-none">
+                      {project.title}
+                    </h3>
+                    
+                    <p className="text-lg text-[#9CA3AF] leading-relaxed mb-10 max-w-lg">
+                      {project.description}
+                    </p>
 
-            return (
-              <div key={project.id} className={`grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center ${isEven ? '' : 'lg:flex-row-reverse'}`}>
-                
-                {/* Visual */}
-                <div className={`lg:col-span-7 ${!isEven && 'lg:order-2'}`}>
-                  <ProjectVisual project={project} index={index} />
-                </div>
+                    <div className="flex flex-col gap-8">
+                      <div>
+                        <p className="text-[10px] font-mono tracking-widest text-[#6B7280] uppercase mb-4">TECHNOLOGY</p>
+                        <div className="flex flex-wrap gap-2">
+                          {project.technologies.map(tech => (
+                            <span key={tech} className="text-xs font-mono text-[#F5F7FA] bg-[#0B0D10] px-3 py-1.5 rounded">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
 
-                {/* Content */}
-                <div className={`lg:col-span-5 flex flex-col justify-center ${!isEven && 'lg:order-1'}`}>
-                  <p className="text-[10px] font-mono tracking-widest text-[#007aff] uppercase mb-4">
-                    {project.number} — {project.category}
-                  </p>
-                  
-                  <h3 className="editorial-subheading text-[#111111] mb-6">
-                    {project.title}
-                  </h3>
-                  
-                  <p className="text-base text-[#555555] leading-relaxed mb-8">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-col gap-8">
-                    <div>
-                      <p className="editorial-label text-[#111111] mb-3">TECHNOLOGY</p>
-                      <p className="text-sm text-[#888888] font-mono tracking-wide">
-                        {project.technologies.join(", ")}
-                      </p>
+                      {project.link && (
+                        <a 
+                          href={project.link}
+                          className="group inline-flex items-center gap-4 text-xs font-bold tracking-widest text-[#F5F7FA] uppercase w-fit"
+                        >
+                          VIEW CASE STUDY
+                          <span className="w-8 h-[1px] bg-[#3B82F6] group-hover:w-16 transition-all duration-300" />
+                        </a>
+                      )}
                     </div>
+                  </motion.div>
+                );
+              })}
+            </div>
 
-                    {project.link && (
-                      <a 
-                        href={project.link}
-                        className="group inline-flex items-center gap-4 text-xs font-bold tracking-widest text-[#111111] uppercase"
-                      >
-                        VIEW CASE STUDY
-                        <span className="w-8 h-[1px] bg-[#111111] group-hover:w-16 transition-all duration-300" />
-                      </a>
-                    )}
-                  </div>
-                </div>
+            {/* Right: 3D Visualization */}
+            <div className="relative h-full w-full">
+              {isWebGLSupported && (
+                <Canvas
+                  camera={{ position: [0, 0, 6], fov: 45 }}
+                  dpr={[1, 2]}
+                  gl={{ antialias: true, alpha: true }}
+                  className="w-full h-full cursor-move"
+                >
+                  <SceneLighting />
+                  {/* Render the currently active visual */}
+                  {renderVisual(activeIndex)}
+                </Canvas>
+              )}
+            </div>
 
-              </div>
-            );
-          })}
+          </div>
         </div>
-
       </div>
     </section>
   );

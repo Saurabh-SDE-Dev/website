@@ -1,116 +1,112 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { NAV_ITEMS } from "@/data/navigation";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { NAV_ITEMS as NAVIGATION_LINKS } from "@/data/navigation";
+import { Canvas } from "@react-three/fiber";
+import dynamic from "next/dynamic";
+import { useWebGL } from "@/hooks/useWebGL";
+
+const IdentityCore = dynamic(
+  () => import("@/components/3d/IdentityCore").then(mod => mod.IdentityCore),
+  { ssr: false }
+);
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [activeSection, setActiveSection] = useState("");
+  const [isHoveringName, setIsHoveringName] = useState(false);
+  const isWebGLSupported = useWebGL();
+
+  const { scrollY } = useScroll();
+  const navBg = useTransform(
+    scrollY,
+    [0, 50],
+    ["rgba(11, 13, 16, 0)", "rgba(11, 13, 16, 0.8)"]
+  );
+  const navBorder = useTransform(
+    scrollY,
+    [0, 50],
+    ["rgba(245, 247, 250, 0)", "rgba(245, 247, 250, 0.05)"]
+  );
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      
+      const sections = NAVIGATION_LINKS.map(link => link.href.substring(1));
+      let current = "";
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            current = section;
+            break;
+          }
+        }
+      }
+      setActiveSection(current);
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled 
-            ? "bg-[#0a0a0c]/80 backdrop-blur-md border-b border-white/5 py-3" 
-            : "bg-transparent py-6"
-        }`}
-      >
-        <div className="section-container flex items-center justify-between">
-          
-          {/* Logo / Brand */}
-          <a href="#" className="flex items-center gap-2 group">
-            <span className="font-bold tracking-tight text-sm text-[#ffffff]">
-              SAURABH SONALKAR
-            </span>
-          </a>
+    <motion.nav 
+      style={{ backgroundColor: navBg, borderBottomWidth: 1, borderBottomColor: navBorder }}
+      className="fixed top-0 left-0 w-full z-50 backdrop-blur-md transition-colors duration-300"
+    >
+      <div className="section-container flex items-center justify-between h-20">
+        
+        {/* Visual Identity Logo */}
+        <a 
+          href="#home" 
+          className="flex items-center gap-4 group"
+          onMouseEnter={() => setIsHoveringName(true)}
+          onMouseLeave={() => setIsHoveringName(false)}
+        >
+          {isWebGLSupported && (
+            <div className="w-8 h-8 relative">
+              <Canvas camera={{ position: [0, 0, 4], fov: 45 }} dpr={[1, 2]}>
+                <ambientLight intensity={0.5} />
+                <directionalLight position={[2, 2, 2]} intensity={1} color={isHoveringName ? "#22D3EE" : "#F5F7FA"} />
+                <IdentityCore isMiniature={true} />
+              </Canvas>
+            </div>
+          )}
+          <span className={`text-sm font-bold tracking-widest uppercase transition-all duration-300 ${isHoveringName ? 'text-[#F5F7FA] tracking-[0.25em]' : 'text-[#E8EDF3]'}`}>
+            S.S.
+          </span>
+        </a>
 
-          {/* Desktop Navigation */}
-          {!isMobile && (
-            <nav className="flex items-center gap-8">
-              <ul className="flex items-center gap-6">
-                {NAV_ITEMS.map((item) => (
-                  <li key={item.label}>
-                    <a 
-                      href={item.href} 
-                      className="text-xs font-medium tracking-wide text-[#a0a0b0] hover:text-[#ffffff] transition-colors relative group/nav"
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-8">
+          {NAVIGATION_LINKS.map((link) => {
+            const isActive = activeSection === link.href.substring(1);
+            return (
               <a 
-                href="/resume.pdf" 
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs font-medium tracking-wide px-5 py-2.5 bg-white text-black hover:bg-gray-200 transition-colors rounded"
+                key={link.label}
+                href={link.href}
+                className={`relative text-xs font-mono tracking-widest uppercase py-2 transition-colors duration-300 ${
+                  isActive ? "text-[#F5F7FA]" : "text-[#9CA3AF] hover:text-[#E8EDF3]"
+                }`}
               >
-                RESUME
+                {link.label}
+                {isActive && (
+                  <motion.div 
+                    layoutId="nav-active"
+                    className="absolute -bottom-[2px] left-0 right-0 h-[1px] bg-[#3B82F6]"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
               </a>
-            </nav>
-          )}
-
-          {/* Mobile Menu Toggle */}
-          {isMobile && (
-            <button 
-              className="text-xs font-medium tracking-wide text-[#ffffff] z-50"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? "CLOSE" : "MENU"}
-            </button>
-          )}
-
+            );
+          })}
         </div>
-      </header>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobile && mobileMenuOpen && (
-          <motion.div 
-            className="fixed inset-0 z-40 bg-[#0a0a0c] flex flex-col items-center justify-center"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <ul className="flex flex-col items-center gap-8 mb-12">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.label}>
-                  <a 
-                    href={item.href} 
-                    className="text-2xl font-bold tracking-tight text-[#ffffff]"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            
-            <a 
-              href="/resume.pdf" 
-              target="_blank"
-              rel="noreferrer"
-              className="text-sm font-medium tracking-wide px-8 py-4 bg-white text-black rounded"
-            >
-              VIEW RESUME
-            </a>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+      </div>
+    </motion.nav>
   );
 }

@@ -1,53 +1,33 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 export function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
-      requestAnimationFrame(() => setIsTouchDevice(true));
+    // Only show custom cursor on desktop/pointer devices
+    if (window.matchMedia("(pointer: coarse)").matches) {
       return;
     }
 
-    const cursor = cursorRef.current;
-    if (!cursor) return;
-
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-
-    const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    const updateMousePosition = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (!isVisible) setIsVisible(true);
     };
 
-    const updateCursor = () => {
-      cursorX += (mouseX - cursorX) * 0.25;
-      cursorY += (mouseY - cursorY) * 0.25;
-
-      if (cursor) {
-        cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
-      }
-
-      requestAnimationFrame(updateCursor);
-    };
-
-    const onMouseOver = (e: MouseEvent) => {
+    const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      // Check if hovering over clickable elements or 3D canvases
       if (
         target.tagName.toLowerCase() === "a" ||
         target.tagName.toLowerCase() === "button" ||
         target.closest("a") ||
         target.closest("button") ||
-        window.getComputedStyle(target).cursor === "pointer"
+        target.tagName.toLowerCase() === "canvas"
       ) {
         setIsHovering(true);
       } else {
@@ -55,35 +35,48 @@ export function CustomCursor() {
       }
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseover", onMouseOver);
-    
-    const animationFrameId = requestAnimationFrame(updateCursor);
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
+
+    window.addEventListener("mousemove", updateMousePosition);
+    window.addEventListener("mouseover", handleMouseOver);
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseover", onMouseOver);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("mousemove", updateMousePosition);
+      window.removeEventListener("mouseover", handleMouseOver);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
     };
-  }, []);
+  }, [isVisible]);
 
-  if (isTouchDevice || prefersReducedMotion) return null;
+  if (!isVisible) return null;
 
   return (
-    <div
-      ref={cursorRef}
-      className="fixed top-0 left-0 pointer-events-none z-[9999] -ml-2 -mt-2 w-4 h-4 flex items-center justify-center mix-blend-difference"
-    >
+    <>
+      {/* Central Dot */}
       <motion.div
-        className="rounded-full flex items-center justify-center"
+        className="fixed top-0 left-0 w-2 h-2 bg-[#F5F7FA] rounded-full pointer-events-none z-[100] mix-blend-difference"
         animate={{
-          width: isHovering ? 24 : 4,
-          height: isHovering ? 24 : 4,
-          backgroundColor: isHovering ? "transparent" : "#ffffff",
-          border: isHovering ? "1px solid rgba(255, 255, 255, 0.5)" : "none",
+          x: mousePosition.x - 4,
+          y: mousePosition.y - 4,
+          scale: isHovering ? 0 : 1,
         }}
-        transition={{ duration: 0.15, ease: "linear" }}
+        transition={{ type: "tween", ease: "backOut", duration: 0.1 }}
       />
-    </div>
+      
+      {/* Hover Ring */}
+      <motion.div
+        className="fixed top-0 left-0 w-8 h-8 border border-[#F5F7FA] rounded-full pointer-events-none z-[100] mix-blend-difference"
+        animate={{
+          x: mousePosition.x - 16,
+          y: mousePosition.y - 16,
+          scale: isHovering ? 1.5 : 0,
+          opacity: isHovering ? 1 : 0,
+        }}
+        transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
+      />
+    </>
   );
 }

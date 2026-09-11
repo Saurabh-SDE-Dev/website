@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useSpring } from "framer-motion";
+import { useInView, useSpring } from "framer-motion";
 import { IMPACT_METRICS } from "@/data/architecture";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -46,7 +46,7 @@ export function Architecture() {
 
         {/* Metrics Grid (Editorial) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-24">
-          {IMPACT_METRICS.map((metric, index) => (
+          {IMPACT_METRICS.map((metric) => (
             <div key={metric.label} className="flex flex-col relative border-t border-black/10 pt-8">
               <Counter value={metric.value} suffix={metric.suffix} />
               
