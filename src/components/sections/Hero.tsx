@@ -1,107 +1,100 @@
 "use client";
 
-import { RevealText } from "@/components/animations/RevealText";
-import { HeroSystemStructure } from "@/components/3d/HeroSystemStructure";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
+import dynamic from "next/dynamic";
+import { useWebGL } from "@/hooks/useWebGL";
+import { HERO_CONTENT } from "@/data/hero";
+
+const HeroSystemStructure = dynamic(
+  () => import("@/components/3d/HeroSystemStructure"),
+  { ssr: false }
+);
 
 export function Hero() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isWebGLSupported = useWebGL();
+  const { scrollY } = useScroll();
+
+  // Scroll animations for storytelling parallax
+  const textY = useTransform(scrollY, [0, 1000], [0, -150]);
+  const textOpacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const modelX = useTransform(scrollY, [0, 1000], [0, 300]);
+  const modelOpacity = useTransform(scrollY, [0, 800], [1, 0.2]);
 
   return (
-    <section className="relative w-full min-h-screen flex items-center pt-24 md:pt-0 overflow-hidden bg-[var(--background)]">
-      
-      <div className="section-container relative z-10 w-full h-full flex flex-col md:flex-row justify-between items-center gap-12">
+    <section 
+      id="home" 
+      className="theme-dark relative min-h-screen w-full flex items-center justify-center overflow-hidden"
+    >
+      <div className="section-container relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh] mt-20">
         
-        {/* LEFT COLUMN: Typography (70% width on desktop) */}
-        <div className="w-full md:w-[70%] flex flex-col z-20">
-          
-          <RevealText delay={0.1} direction="up">
-            <p className="text-[0.65rem] font-mono tracking-widest text-[var(--text-secondary)] uppercase mb-6">
-              SAURABH SONALKAR <span className="opacity-50 mx-2">/</span> SOFTWARE DEVELOPMENT ENGINEER
+        {/* Left: Typography & Content */}
+        <motion.div 
+          style={{ y: textY, opacity: textOpacity }}
+          className="flex flex-col items-start pt-10 lg:pt-0"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <p className="editorial-label mb-8">
+              {HERO_CONTENT.greeting}
             </p>
-          </RevealText>
-
-          <RevealText delay={0.2} direction="up">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[var(--text-primary)] leading-[1.05] mb-8">
-              BUILDING<br />
-              SYSTEMS<br />
-              THAT SCALE.
+            <h1 className="editorial-heading mb-6 tracking-tighter">
+              {HERO_CONTENT.name.split(" ")[0]}<br />
+              <span className="text-[#a0a0b0]">{HERO_CONTENT.name.split(" ")[1]}</span>
             </h1>
-          </RevealText>
-          
-          <RevealText delay={0.3} direction="up">
-            <p className="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed font-normal max-w-lg mb-12">
-              Software Development Engineer with 3+ years of experience building 
-              scalable backend applications, microservices, AI/ML systems, 
-              cloud automation, OCR pipelines, and production platforms.
+            <h2 className="text-xl md:text-2xl font-medium tracking-tight text-[#ffffff] mb-8">
+              {HERO_CONTENT.role}
+            </h2>
+            <p className="text-base text-[#888888] max-w-md leading-relaxed mb-12">
+              {HERO_CONTENT.headline}
             </p>
-          </RevealText>
-          
-          {/* ACTION BUTTONS */}
-          <RevealText delay={0.4} direction="up">
-            <div className="flex flex-wrap items-center gap-6 mb-16">
+
+            <div className="flex items-center gap-6">
               <a 
-                href="#work" 
-                className="px-6 py-3 bg-[var(--text-primary)] text-[var(--background)] hover:bg-[var(--accent)] hover:text-white transition-colors text-xs font-mono tracking-widest rounded-sm"
+                href="#contact"
+                className="px-8 py-4 bg-white text-black text-xs font-semibold tracking-wide rounded hover:bg-gray-200 transition-colors"
               >
-                VIEW MY WORK
+                CONTACT ME
               </a>
               <a 
-                href="/resume.pdf" 
-                target="_blank"
-                rel="noreferrer"
-                className="px-6 py-3 border border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--text-secondary)] transition-colors text-xs font-mono tracking-widest rounded-sm"
+                href="#work"
+                className="px-8 py-4 border border-white/20 text-white text-xs font-semibold tracking-wide rounded hover:border-white/50 transition-colors"
               >
-                VIEW RESUME
+                VIEW WORK
               </a>
             </div>
-          </RevealText>
+          </motion.div>
+        </motion.div>
 
-          {/* METADATA (Desktop only here, rendered at bottom on mobile) */}
-          {!isMobile && (
-            <RevealText delay={0.5} direction="up">
-              <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-                <p className="text-[0.6rem] font-mono tracking-widest text-[var(--text-tertiary)] uppercase flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
-                  3+ YEARS EXPERIENCE
-                </p>
-                <p className="text-[0.6rem] font-mono tracking-widest text-[var(--text-tertiary)] uppercase">
-                  PYTHON / BACKEND / AI / CLOUD
-                </p>
-                <p className="text-[0.6rem] font-mono tracking-widest text-[var(--text-tertiary)] uppercase">
-                  MUMBAI, INDIA
-                </p>
-              </div>
-            </RevealText>
+        {/* Right: Premium 3D Object */}
+        <motion.div 
+          style={{ x: modelX, opacity: modelOpacity }}
+          className="relative h-[50vh] lg:h-[80vh] w-full flex items-center justify-center"
+        >
+          {isWebGLSupported && (
+            <Canvas
+              camera={{ position: [0, 0, 6], fov: 45 }}
+              dpr={[1, 2]}
+              gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+              className="w-full h-full"
+            >
+              <HeroSystemStructure scrollYProgress={scrollY} />
+            </Canvas>
           )}
-
-        </div>
-
-        {/* RIGHT COLUMN: 3D Visualization (30% width on desktop) */}
-        <RevealText delay={0.6} direction="none" className="w-full md:w-[30%] h-[300px] md:h-[500px] flex items-center justify-center lg:justify-end z-10">
-          <HeroSystemStructure />
-        </RevealText>
-
-        {/* METADATA (Mobile only here, rendered at bottom) */}
-        {isMobile && (
-          <RevealText delay={0.7} direction="up" className="w-full mt-8 pb-12 border-t border-[var(--border)] pt-8">
-            <div className="flex flex-col gap-4">
-              <p className="text-[0.6rem] font-mono tracking-widest text-[var(--text-tertiary)] uppercase flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
-                3+ YEARS EXPERIENCE
-              </p>
-              <p className="text-[0.6rem] font-mono tracking-widest text-[var(--text-tertiary)] uppercase">
-                PYTHON / BACKEND / AI / CLOUD
-              </p>
-              <p className="text-[0.6rem] font-mono tracking-widest text-[var(--text-tertiary)] uppercase">
-                MUMBAI, INDIA
-              </p>
-            </div>
-          </RevealText>
-        )}
-
+        </motion.div>
       </div>
-      
+
+      {/* Scroll indicator */}
+      <motion.div 
+        style={{ opacity: textOpacity }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+      >
+        <span className="editorial-label text-[10px]">SCROLL</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-white/30 to-transparent" />
+      </motion.div>
     </section>
   );
 }

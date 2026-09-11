@@ -11,7 +11,6 @@ export function CustomCursor() {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    // Check if it's a touch device
     if (window.matchMedia("(hover: none) and (pointer: coarse)").matches) {
       requestAnimationFrame(() => setIsTouchDevice(true));
       return;
@@ -31,9 +30,8 @@ export function CustomCursor() {
     };
 
     const updateCursor = () => {
-      // Smooth lerping for the cursor
-      cursorX += (mouseX - cursorX) * 0.2;
-      cursorY += (mouseY - cursorY) * 0.2;
+      cursorX += (mouseX - cursorX) * 0.25;
+      cursorY += (mouseY - cursorY) * 0.25;
 
       if (cursor) {
         cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
@@ -60,7 +58,6 @@ export function CustomCursor() {
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseover", onMouseOver);
     
-    // Start animation loop
     const animationFrameId = requestAnimationFrame(updateCursor);
 
     return () => {
@@ -77,17 +74,13 @@ export function CustomCursor() {
       ref={cursorRef}
       className="fixed top-0 left-0 pointer-events-none z-[9999] -ml-2 -mt-2 w-4 h-4 flex items-center justify-center mix-blend-difference"
     >
-      {/* 
-        Minimal cursor: 
-        A small white dot that expands into a larger outlined circle on hover 
-      */}
       <motion.div
-        className="rounded-full border border-white flex items-center justify-center"
+        className="rounded-full flex items-center justify-center"
         animate={{
-          width: isHovering ? 32 : 6,
-          height: isHovering ? 32 : 6,
-          backgroundColor: isHovering ? "transparent" : "rgba(255, 255, 255, 1)",
-          opacity: isHovering ? 0.5 : 1,
+          width: isHovering ? 24 : 4,
+          height: isHovering ? 24 : 4,
+          backgroundColor: isHovering ? "transparent" : "#ffffff",
+          border: isHovering ? "1px solid rgba(255, 255, 255, 0.5)" : "none",
         }}
         transition={{ duration: 0.15, ease: "linear" }}
       />

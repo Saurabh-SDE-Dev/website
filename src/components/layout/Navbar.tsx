@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-
 import { NAV_ITEMS } from "@/data/navigation";
 
 export function Navbar() {
@@ -12,7 +12,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -21,17 +21,19 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled 
-            ? "bg-[var(--background)]/80 backdrop-blur-md border-b border-[var(--border)] py-3" 
-            : "bg-transparent py-5"
+            ? "bg-[#0a0a0c]/80 backdrop-blur-md border-b border-white/5 py-3" 
+            : "bg-transparent py-6"
         }`}
       >
         <div className="section-container flex items-center justify-between">
           
-          {/* Logo / Name */}
-          <a href="#" className="font-semibold tracking-wide text-sm md:text-base text-[var(--text-primary)]">
-            SAURABH SONALKAR
+          {/* Logo / Brand */}
+          <a href="#" className="flex items-center gap-2 group">
+            <span className="font-bold tracking-tight text-sm text-[#ffffff]">
+              SAURABH SONALKAR
+            </span>
           </a>
 
           {/* Desktop Navigation */}
@@ -42,7 +44,7 @@ export function Navbar() {
                   <li key={item.label}>
                     <a 
                       href={item.href} 
-                      className="text-xs font-mono tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                      className="text-xs font-medium tracking-wide text-[#a0a0b0] hover:text-[#ffffff] transition-colors relative group/nav"
                     >
                       {item.label}
                     </a>
@@ -54,9 +56,9 @@ export function Navbar() {
                 href="/resume.pdf" 
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs font-mono tracking-widest px-4 py-2 bg-[var(--text-primary)] text-[var(--background)] hover:bg-[var(--accent)] hover:text-white transition-colors rounded-sm"
+                className="text-xs font-medium tracking-wide px-5 py-2.5 bg-white text-black hover:bg-gray-200 transition-colors rounded"
               >
-                VIEW RESUME
+                RESUME
               </a>
             </nav>
           )}
@@ -64,7 +66,7 @@ export function Navbar() {
           {/* Mobile Menu Toggle */}
           {isMobile && (
             <button 
-              className="text-sm font-mono tracking-widest text-[var(--text-primary)]"
+              className="text-xs font-medium tracking-wide text-[#ffffff] z-50"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? "CLOSE" : "MENU"}
@@ -75,32 +77,40 @@ export function Navbar() {
       </header>
 
       {/* Mobile Menu Overlay */}
-      {isMobile && mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[var(--background)] pt-24 px-6 flex flex-col">
-          <ul className="flex flex-col gap-8 mb-12">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.label}>
-                <a 
-                  href={item.href} 
-                  className="text-xl font-bold tracking-tight text-[var(--text-primary)]"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          
-          <a 
-            href="/resume.pdf" 
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm font-mono text-center tracking-widest px-6 py-4 bg-[var(--text-primary)] text-[var(--background)] rounded-sm"
+      <AnimatePresence>
+        {isMobile && mobileMenuOpen && (
+          <motion.div 
+            className="fixed inset-0 z-40 bg-[#0a0a0c] flex flex-col items-center justify-center"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
           >
-            VIEW RESUME
-          </a>
-        </div>
-      )}
+            <ul className="flex flex-col items-center gap-8 mb-12">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.label}>
+                  <a 
+                    href={item.href} 
+                    className="text-2xl font-bold tracking-tight text-[#ffffff]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            
+            <a 
+              href="/resume.pdf" 
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm font-medium tracking-wide px-8 py-4 bg-white text-black rounded"
+            >
+              VIEW RESUME
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
